@@ -7,6 +7,14 @@ import sys
 import datetime
 
 class TCPHandler:
+    ###############################
+    # TCPHandler is not as modular as Client. If I had time to rewrite it I'd
+    # break it into more readable functions.
+    #
+    # This first part establishes the host, port, and socket, reading out
+    # either that the socket bind was successful or giving an error.
+    ###############################
+
     def run(self, host, port):
         self.host = host
         self.port = port
@@ -18,6 +26,18 @@ class TCPHandler:
         except socket.error as msg:
             print 'Bind failed. Error Code : '+ str(msg[0]) + 'Message'+ msg[1]
             sys.exit()
+
+    ###############################
+    # This next part does the work of receiving messages and writing them to
+    # the correct file.
+    #
+    # wc is my "While Condition." It basically says: listen until I tell you
+    # not to (which is by sending the message "3").
+    #
+    # The messages come in flagged either with a 0 (system information, the
+    # whole point of the program) or with a 1 (status information such as 
+    # heartbeats).
+    ###############################
 
         self.socket.listen(5)
         wc = 2
